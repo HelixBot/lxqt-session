@@ -160,10 +160,20 @@ QModelIndex ListWidget::moveCursor(CursorAction cursorAction, Qt::KeyboardModifi
     {
         case MoveUp:
         case MovePageUp:
+            if (current == mColumns - 1)
+            {
+                QCoreApplication::postEvent(parentWidget(), new QKeyEvent{QEvent::KeyPress, Qt::Key_Backtab, Qt::NoModifier});
+                return QModelIndex{};
+            }
             next = (current - mColumns) % count;
             break;
         case MoveDown:
         case MovePageDown:
+            if (current == count - 1)
+            {
+                QCoreApplication::postEvent(parentWidget(), new QKeyEvent{QEvent::KeyPress, Qt::Key_Tab, Qt::NoModifier});
+                return QModelIndex{};
+            }
             next = (current + mColumns) % count;
             break;
         case MoveLeft:
